@@ -1,1 +1,9 @@
-
+// définition des variables
+const formulaire = document.getElementById('form');
+const personalInfo = document.getElementById('personal-info');
+const productInfo = document.getElementById('product-info');
+const complaintGroup = document.getElementById('complaints-group');
+const complaintDescription = document.getElementById('complaint-description-container');
+const desiredSolution = document.getElementById('solutions-group');
+const solutionDescription = document.getElementById('solution-description-container');
+const submitBtn = document.getElementById('submit-btn');
