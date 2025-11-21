@@ -14,19 +14,20 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const orderNumRegex = /^2024\d{10}$/;
 const productCodeRegex = /^[A-Z]{2}\d{2}-[A-Z]\d{3}-[A-Z]{2}\d$/i;
 
-// variables spécifiques de filtre
-const isNotEmptyFullName = formulaire.elements['full-name'].value.trim() !== "";
+// Fonction de validation du formulaire
+function validateForm(){
+  // variables spécifiques de filtre
+  const isNotEmptyFullName = formulaire.elements['full-name'].value.trim() !== "";
 const isEmailValid = emailRegex.test(formulaire.elements['email'].value);
 const isValidOrderNum = orderNumRegex.test(formulaire.elements['order-no'].value);
 const isValidProductCode = productCodeRegex.test(formulaire.elements['product-code'].value);
 const isPositiveQuantity = Number(formulaire.elements['quantity'].value) >= 1;
 const isAtLeastOneChecked = complaintGroup.querySelectorAll('input[type="checkbox"]:checked').length > 0;
-const isComplaintDescription = complaintDescription.value.length > 19 && complaintGroup.querySelector('#other-complaint:checked') !== null;
+const isComplaintDescription = complaintDescription.querySelector('textarea').value.length > 19 && complaintGroup.querySelector('#other-complaint:checked') !== null;
 const isSelectedSolution = desiredSolution.querySelectorAll('input[type="radio"]:checked').length > 0;
-const isSolutionDescription = solutionDescription.value.length > 19 && desiredSolution.querySelector('#other-solution:checked') !== null;
+const isSolutionDescription = solutionDescription.querySelector('textarea').value.length > 19 && desiredSolution.querySelector('#other-solution:checked') !== null;
 
-// Fonction de validation du formulaire
-function validateForm(){
+// Objet - items : valide ou non
   const fullFormData = {
         'full-name': isNotEmptyFullName,
         'email': isEmailValid,
@@ -41,12 +42,15 @@ function validateForm(){
     return fullFormData;
 };
 
-// Fonction de vérification des input
-function checkErrors(e) {
+function isValid(fullFormData) {
+  for (let value of Object.values(fullFormData)) {
+    console.log(value);
+  };
+};
+
+
+formulaire.addEventListener('submit', (e) => {
   e.preventDefault();
-
-}
-
-
-// Event listener sur submit btn
-submitBtn.addEventListener('submit', checkErrors);
+  const fullFormData = validateForm();  
+  isValid(fullFormData);             
+});
