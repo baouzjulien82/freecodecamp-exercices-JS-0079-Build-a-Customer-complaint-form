@@ -51,13 +51,18 @@ formulaire.addEventListener('submit', (e) => {
 
 // fonction de vérification finale de l'objet
 function isValid(fullFormData) {
-  const valueArray = [];
-  for (let value of Object.values(fullFormData)) {
-    valueArray.push(value);
-  };
-  console.log(!valueArray.includes(false));
-  return !valueArray.includes(false);
-};
+  const allValid = Object.values(fullFormData).every(value => value === true);
+  console.log(allValid);
+  return allValid;
+}
+
+
+// Modification CSS sur les filtres
+formulaire.elements['full-name'].addEventListener('input', (e) => {
+  const isNotEmptyFullName = e.target.value.trim() !== "";
+  console.log(isNotEmptyFullName ? 'bon' : 'pas bon');
+});
+
 
 
 
