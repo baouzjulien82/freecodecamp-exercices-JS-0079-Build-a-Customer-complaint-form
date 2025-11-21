@@ -14,7 +14,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const orderNumRegex = /^2024\d{10}$/;
 const productCodeRegex = /^[A-Z]{2}\d{2}-[A-Z]\d{3}-[A-Z]{2}\d$/i;
 
-// Fonction de validation du formulaire
+// Fonction de validation des éléments du formulaire
 function validateForm(){
   // variables spécifiques de filtre
   const isNotEmptyFullName = formulaire.elements['full-name'].value.trim() !== "";
@@ -42,15 +42,22 @@ const isSolutionDescription = solutionDescription.querySelector('textarea').valu
     return fullFormData;
 };
 
-function isValid(fullFormData) {
-  for (let value of Object.values(fullFormData)) {
-    console.log(value);
-  };
-};
-
-
+// Event listener sur submit-form
 formulaire.addEventListener('submit', (e) => {
   e.preventDefault();
   const fullFormData = validateForm();  
   isValid(fullFormData);             
 });
+
+// fonction de vérification finale de l'objet
+function isValid(fullFormData) {
+  const valueArray = [];
+  for (let value of Object.values(fullFormData)) {
+    valueArray.push(value);
+  };
+  console.log(!valueArray.includes(false));
+  return !valueArray.includes(false);
+};
+
+
+
