@@ -15,15 +15,31 @@ const orderNumRegex = /^2024\d{10}$/;
 const productCodeRegex = /^[A-Z]{2}\d{2}-[A-Z]\d{3}-[A-Z]{2}\d$/i;
 
 // variables spécifiques de filtre
-const isEmptyFullName = formulaire.elements['full-name'].value.trim()  === "";
+const isNotEmptyFullName = formulaire.elements['full-name'].value.trim() !== "";
 const isEmailValid = emailRegex.test(formulaire.elements['email'].value);
 const isValidOrderNum = orderNumRegex.test(formulaire.elements['order-no'].value);
 const isValidProductCode = productCodeRegex.test(formulaire.elements['product-code'].value);
 const isPositiveQuantity = Number(formulaire.elements['quantity'].value) >= 1;
 const isAtLeastOneChecked = complaintGroup.querySelectorAll('input[type="checkbox"]:checked').length > 0;
-const iscomplaintDescription = complaintDescription.value.length > 19 && complaintGroup.querySelector('#other-complaint:checked') !== null;
+const isComplaintDescription = complaintDescription.value.length > 19 && complaintGroup.querySelector('#other-complaint:checked') !== null;
 const isSelectedSolution = desiredSolution.querySelectorAll('input[type="radio"]:checked').length > 0;
 const isSolutionDescription = solutionDescription.value.length > 19 && desiredSolution.querySelector('#other-solution:checked') !== null;
+
+// Fonction de validation du formulaire
+function validateForm(){
+  const fullFormData = {
+        'full-name': isNotEmptyFullName,
+        'email': isEmailValid,
+        'order-no': isValidOrderNum,
+        'product-code': isValidProductCode,
+        'quantity': isPositiveQuantity,
+        'complaints-group': isAtLeastOneChecked,
+        'complaint-description': isComplaintDescription,
+        'solutions-group': isSelectedSolution,
+        'solution-description': isSolutionDescription
+    };
+    return fullFormData;
+};
 
 // Fonction de vérification des input
 function checkErrors(e) {
