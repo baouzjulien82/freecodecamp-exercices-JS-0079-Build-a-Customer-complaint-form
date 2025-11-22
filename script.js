@@ -1,4 +1,5 @@
-// Version initiale
+/*
+// Version initiale ------------------------------------------------------------------------------------------------------------
 // définition des variables principales
 const formulaire = document.getElementById('form');
 const personalInfo = document.getElementById('personal-info');
@@ -100,4 +101,153 @@ radioBtn.forEach(btn => {
 solutionDescription.querySelector('textarea').addEventListener('change', (e) => {
   const isSolutionDescription = e.target.value.length > 19 && desiredSolution.querySelector('#other-solution:checked') !== null;
 solutionDescription.querySelector('textarea').style.borderColor = isSolutionDescription ? "green" : "red";
+}); */
+
+// Version Corrigée ------------------------------------------------------------------------------------------------------------
+// -------------------------
+// Récupération des éléments
+// -------------------------
+const formulaire = document.getElementById('form');
+const complaintGroup = document.getElementById('complaints-group');
+const complaintDescription = document.getElementById('complaint-description-container');
+const desiredSolution = document.getElementById('solutions-group');
+const solutionDescription = document.getElementById('solution-description-container');
+
+// Regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const orderNumRegex = /^2024\d{6}$/;
+const productCodeRegex = /^[A-Z]{2}\d{2}-[A-Z]\d{3}-[A-Z]{2}\d$/i;
+
+// -------------------------
+// Fonction validateForm
+// -------------------------
+function validateForm() {
+  const fullName = formulaire.elements['full-name'].value.trim() !== "";
+  const email = emailRegex.test(formulaire.elements['email'].value);
+  const orderNo = orderNumRegex.test(formulaire.elements['order-no'].value);
+  const productCode = productCodeRegex.test(formulaire.elements['product-code'].value);
+  const quantity = Number(formulaire.elements['quantity'].value) > 0;
+
+  const complaintsChecked = complaintGroup.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+  const complaintDescriptionValid = complaintGroup.querySelector('#other-complaint:checked') 
+      ? complaintDescription.querySelector('textarea').value.trim().length >= 20
+      : true;
+
+  const solutionSelected = desiredSolution.querySelectorAll('input[type="radio"]:checked').length > 0;
+  const solutionDescriptionValid = desiredSolution.querySelector('#other-solution:checked') 
+      ? solutionDescription.querySelector('textarea').value.trim().length >= 20
+      : true;
+
+  return {
+    'full-name': fullName,
+    'email': email,
+    'order-no': orderNo,
+    'product-code': productCode,
+    'quantity': quantity,
+    'complaints-group': complaintsChecked,
+    'complaint-description': complaintDescriptionValid,
+    'solutions-group': solutionSelected,
+    'solution-description': solutionDescriptionValid
+  };
+}
+
+// -------------------------
+// Fonction isValid
+// -------------------------
+function isValid(formData) {
+  return Object.values(formData).every(value => value === true);
+}
+
+// -------------------------
+// Gestion du submit
+// -------------------------
+formulaire.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const formData = validateForm();
+
+  // Si tout est valide, formulaire OK
+  if (isValid(formData)) {
+    console.log("Formulaire valide !");
+  } else {
+    // Surbrillance des champs invalides
+    for (const key in formData) {
+      if (!formData[key]) {
+        switch (key) {
+          case 'full-name':
+          case 'email':
+          case 'order-no':
+          case 'product-code':
+          case 'quantity':
+            formulaire.elements[key].style.borderColor = "red";
+            break;
+          case 'complaints-group':
+            complaintGroup.style.borderColor = "red";
+            break;
+          case 'complaint-description':
+            complaintDescription.querySelector('textarea').style.borderColor = "red";
+            break;
+          case 'solutions-group':
+            desiredSolution.style.borderColor = "red";
+            break;
+          case 'solution-description':
+            solutionDescription.querySelector('textarea').style.borderColor = "red";
+            break;
+        }
+      }
+    }
+  }
 });
+
+// -------------------------
+// Gestion du change pour tous les champs
+// -------------------------
+
+// Fonction utilitaire pour inputs et textarea
+function addChangeListener(input, validator) {
+  input.addEventListener('change', (e) => {
+    e.target.style.borderColor = validator(e.target) ? "green" : "red";
+  });
+}
+
+// Inputs simples
+addChangeListener(formulaire.elements['full-name'], input => input.value.trim() !== "");
+addChangeListener(formulaire.elements['email'], input => emailRegex.test(input.value));
+addChangeListener(formulaire.elements['order-no'], input => orderNumRegex.test(input.value));
+addChangeListener(formulaire.elements['product-code'], input => productCodeRegex.test(input.value));
+addChangeListener(formulaire.elements['quantity'], input => Number(input.value) > 0);
+
+// Checkbox group
+const checkboxes = complaintGroup.querySelectorAll('input[type="checkbox"]');
+checkboxes.forEach(box => {
+  box.addEventListener('change', () => {
+    const valid = complaintGroup.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+    complaintGroup.style.borderColor = valid ? "green" : "red";
+  });
+});
+
+// Complaint description
+complaintDescription.querySelector('textarea').addEventListener('change', (e) => {
+  const valid = complaintGroup.querySelector('#other-complaint:checked') 
+      ? e.target.value.trim().length >= 20
+      : true;
+  e.target.style.borderColor = valid ? "green" : "red";
+});
+
+// Radio group
+const radios = desiredSolution.querySelectorAll('input[type="radio"]');
+radios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    const valid = desiredSolution.querySelectorAll('input[type="radio"]:checked').length > 0;
+    desiredSolution.style.borderColor = valid ? "green" : "red";
+  });
+});
+
+// Solution description
+solutionDescription.querySelector('textarea').addEventListener('change', (e) => {
+  const valid = desiredSolution.querySelector('#other-solution:checked') 
+      ? e.target.value.trim().length >= 20
+      : true;
+  e.target.style.borderColor = valid ? "green" : "red";
+});
+
+
