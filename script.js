@@ -17,7 +17,7 @@ const productCodeRegex = /^[A-Z]{2}\d{2}-[A-Z]\d{3}-[A-Z]{2}\d$/i;
 // Fonction de validation des éléments du formulaire
 function validateForm(){
   // variables spécifiques de filtre
-  const isNotEmptyFullName = formulaire.elements['full-name'].value.trim() !== "";
+const isNotEmptyFullName = formulaire.elements['full-name'].value.trim() !== "";
 const isEmailValid = emailRegex.test(formulaire.elements['email'].value);
 const isValidOrderNum = orderNumRegex.test(formulaire.elements['order-no'].value);
 const isValidProductCode = productCodeRegex.test(formulaire.elements['product-code'].value);
@@ -58,11 +58,11 @@ function isValid(fullFormData) {
 
 
 // Modification CSS sur les filtres
-formulaire.elements['full-name'].addEventListener('input', (e) => {
+formulaire.elements['full-name'].addEventListener('change', (e) => {
   const isNotEmptyFullName = e.target.value.trim() !== "";
-  console.log(isNotEmptyFullName ? 'bon' : 'pas bon');
+  formulaire.elements['full-name'].style.borderColor = isNotEmptyFullName ? "green" : "red";
 });
-
-
-
-
+formulaire.elements['email'].addEventListener('change', (e) => {
+  const isEmailValid = emailRegex.test(e.target.value);
+  formulaire.elements['email'].style.borderColor = isEmailValid ? "green" : "red";
+});
