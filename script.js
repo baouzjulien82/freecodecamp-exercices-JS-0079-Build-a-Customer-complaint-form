@@ -66,3 +66,38 @@ formulaire.elements['email'].addEventListener('change', (e) => {
   const isEmailValid = emailRegex.test(e.target.value);
   formulaire.elements['email'].style.borderColor = isEmailValid ? "green" : "red";
 });
+formulaire.elements['order-no'].addEventListener('change', (e) => {
+  const isValidOrderNum = orderNumRegex.test(e.target.value);
+  formulaire.elements['order-no'].style.borderColor = isValidOrderNum ? "green" : "red";
+});
+formulaire.elements['product-code'].addEventListener('change', (e) => {
+  const isValidProductCode = productCodeRegex.test(e.target.value);
+  formulaire.elements['product-code'].style.borderColor = isValidProductCode ? "green" : "red";
+});
+formulaire.elements['quantity'].addEventListener('change', (e) => {
+  const isPositiveQuantity = Number(e.target.value) >= 1;
+  formulaire.elements['quantity'].style.borderColor = isPositiveQuantity ? "green" : "red";
+});
+const checkboxes = complaintGroup.querySelectorAll('input[type="checkbox"]');
+checkboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const isAtLeastOneChecked =
+      complaintGroup.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+    complaintGroup.style.borderColor = isAtLeastOneChecked ? "green" : "red";
+  });
+});
+complaintDescription.querySelector('textarea').addEventListener('change', (e) => {
+  const isComplaintDescription = e.target.value.length > 19 && complaintGroup.querySelector('#other-complaint:checked') !== null;
+  complaintDescription.querySelector('textarea').style.borderColor = isComplaintDescription ? "green" : "red";
+});
+const radioBtn = desiredSolution.querySelectorAll('input[type="radio"]');
+radioBtn.forEach(btn => {
+  btn.addEventListener('change', () => {
+    const isSelectedSolution = desiredSolution.querySelectorAll('input[type="radio"]:checked').length > 0;
+    desiredSolution.style.borderColor = isSelectedSolution ? "green" : "red";
+  });
+});
+solutionDescription.querySelector('textarea').addEventListener('change', (e) => {
+  const isSolutionDescription = e.target.value.length > 19 && desiredSolution.querySelector('#other-solution:checked') !== null;
+solutionDescription.querySelector('textarea').style.borderColor = isSolutionDescription ? "green" : "red";
+})
