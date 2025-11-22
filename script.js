@@ -1,3 +1,4 @@
+// Version initiale
 // définition des variables principales
 const formulaire = document.getElementById('form');
 const personalInfo = document.getElementById('personal-info');
@@ -11,7 +12,7 @@ const submitBtn = document.getElementById('submit-btn');
 
 // Regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const orderNumRegex = /^2024\d{10}$/;
+const orderNumRegex = /^2024\d{6}$/;
 const productCodeRegex = /^[A-Z]{2}\d{2}-[A-Z]\d{3}-[A-Z]{2}\d$/i;
 
 // Fonction de validation des éléments du formulaire
@@ -44,15 +45,14 @@ const isSolutionDescription = solutionDescription.querySelector('textarea').valu
 
 // Event listener sur submit-form
 formulaire.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const fullFormData = validateForm();  
-  isValid(fullFormData);             
+  e.preventDefault();  
+  isValid(validateForm);             
 });
 
 // fonction de vérification finale de l'objet
-function isValid(fullFormData) {
-  const allValid = Object.values(fullFormData).every(value => value === true);
-  console.log(allValid);
+function isValid(validateForm) {
+  const object = validateForm();
+  const allValid = Object.values(object).every(value => value === true);
   return allValid;
 }
 
@@ -100,4 +100,4 @@ radioBtn.forEach(btn => {
 solutionDescription.querySelector('textarea').addEventListener('change', (e) => {
   const isSolutionDescription = e.target.value.length > 19 && desiredSolution.querySelector('#other-solution:checked') !== null;
 solutionDescription.querySelector('textarea').style.borderColor = isSolutionDescription ? "green" : "red";
-})
+});
